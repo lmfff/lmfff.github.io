@@ -84,7 +84,7 @@ function draw() {
     var h = int(dist(mouseX, mouseY, 150, 150));
     var hz = map(h, 0, diag, 150, 0);
     
-    if (mouseX>490 || mouseY>500 || mouseX<10 || mouseY<10)
+    if (mouseX>450 || mouseY>450 || mouseX<50 || mouseY<50)
         {
             osc1.amp(0, 0.05);
             osc2.amp(0, 0.05);
