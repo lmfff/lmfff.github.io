@@ -1,5 +1,16 @@
 var bubbles=[];
 var click = false;
+var xmin = -4;
+var xmax = 4;
+var ymin = -4;
+var ymax = 4;
+
+window.max.bindInlet('changeMinMax', function (a, b, c, d) {
+    xmin=a;
+    xmax=b;
+    ymin=c;
+    ymax=d;
+});
 
 function setup(){
     createCanvas(600, 600);
@@ -19,8 +30,8 @@ function mousePressed(){
                 ellipse(this.x, this.y, 10, 10);
             },
             move: function(){
-                this.x = this.x + random(-4, 4);
-                this.y = this.y + random(-4, 4);
+                this.x = this.x + random(xmin, xmax);
+                this.y = this.y + random(ymin, ymax); 
             }
         }
     }
