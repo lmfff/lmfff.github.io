@@ -24,7 +24,7 @@ function draw(){
         //initial formatting
         background(10)
         translate(25, windowHeight/2)
-        if (alph < 100) {
+        if (alph < 70) {
             alph += 0.5
         }
         fill(250, 250, 250, alph)
