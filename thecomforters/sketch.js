@@ -3,7 +3,7 @@ var mainCnv
 var typeSingle
 var typeSpace
 
-var score = ['Testa testa tanto non funge mai un cazzo', 'eddajelow mostro', "Ma quanto è troia?"]
+var score = ['Testa testa tanto non funge mai un cazzo', 'eddajelow mostro', "Ma quanto è troia?", 'ultima frase..']
 
 var scoreCount = 0
 var txt = score[scoreCount]
