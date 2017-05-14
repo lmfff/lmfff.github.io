@@ -80,6 +80,11 @@ function keyPressed(){
             typeSingle.setVolume(random(0, 1))
             typeSingle.play()
             charCount++
+        } else if (keyCode === 219 && (txt.charCodeAt(charCount+1) === 63)){
+            typeSingle.pan(random(-1, 1))
+            typeSingle.setVolume(random(0, 1))
+            typeSingle.play()
+            charCount++
         } else {
             console.log("The char is: " + txt.charCodeAt(charCount+1) + ", you typed: " + keyCode)
         }
