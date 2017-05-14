@@ -53,7 +53,8 @@ function draw(){
                 typeBell.play()
             } else {
                 //prevent from looping if reached last entry in score array + last bell sound c:
-                typeBell.play()
+                var lastBell = setInterval(function() { typeBell.play() }, 300)
+                setTimeout(function() { clearInterval(lastBell) }, 1000)
                 noLoop()
             }
 
