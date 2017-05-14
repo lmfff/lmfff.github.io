@@ -11,9 +11,9 @@ var txtOver = []
 var charCount = -1
 
 function setup(){
-    typeSingle = loadSound('/src/typeSingle.mp3')
-    typeSpace = loadSound('/src/typeSpace.mp3')
-    typeBell = loadSound('/src/typeBell.mp3')
+    typeSingle = loadSound('/thecomforters/src/typeSingle.mp3')
+    typeSpace = loadSound('/thecomforters/src/typeSpace.mp3')
+    typeBell = loadSound('/thecomforters/src/typeBell.mp3')
     mainCnv = createCanvas(windowWidth, windowHeight)
     mainCnv.background(10)
 }
