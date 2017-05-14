@@ -9,6 +9,7 @@ var scoreCount = 0
 var txt = score[scoreCount]
 var txtOver = []
 var charCount = -1
+var alph = 0
 
 function setup(){
     typeSingle = loadSound('/thecomforters/src/typeSingle.mp3')
@@ -23,7 +24,10 @@ function draw(){
         //initial formatting
         background(10)
         translate(25, windowHeight/2)
-        fill(250, 250, 250, 100)
+        if (alph < 100) {
+            alph += 0.5
+        }
+        fill(250, 250, 250, alph)
         textSize(70)
         textAlign(LEFT)
         //grey text
@@ -43,6 +47,7 @@ function draw(){
             if (scoreCount < score.length - 1){
                 scoreCount++
                 charCount = -1
+                alph = 0
                 txt = score[scoreCount]
                 txtOver = []
                 typeBell.play()
