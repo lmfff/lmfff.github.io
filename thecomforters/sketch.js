@@ -1,101 +1,216 @@
 var mainCnv
-
 var typeSingle
 var typeSpace
+var typeBell
+var roomTone1
+var luggage
+var typeFont
 
-var score = ['Testa testa tanto non funge mai un cazzo', 'La vita è un culo', 'eddajelow mostro', "Ma quanto è troia?"]
+var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in']
 
 var scoreCount = 0
 var txt = score[scoreCount]
 var txtOver = []
 var charCount = -1
 var alph = 0
+var alphInstr = 0
+var alphCred = 0
 
-function setup(){
-    typeSingle = loadSound('/thecomforters/src/typeSingle.mp3')
-    typeSpace = loadSound('/thecomforters/src/typeSpace.mp3')
-    typeBell = loadSound('/thecomforters/src/typeBell.mp3')
+    //variabili relative alle sezioni riprodotte
+var txtSize = 100
+var useraudioOn = true
+var allowNext = true
+var allowInput = true
+var rest = 0
+    ///////////////////////////////////////////////////////////////////////////////////////
+function setup() {
+    typeSingle = loadSound( /*thecomforters */ '/src/typeSingle.mp3')
+    typeSpace = loadSound( /*thecomforters*/ '/src/typeSpace.mp3')
+    typeBell = loadSound( /*thecomforters*/ '/src/typeBell.mp3')
+    roomTone1 = loadSound( /*thecomforters*/ '/src/roomTone1.mp3')
+    luggage = loadSound( /*thecomforters*/ '/src/luggage.wav')
+    typeFont = loadFont( /*thecomforters*/ '/src/Olivetti.ttf')
     mainCnv = createCanvas(windowWidth, windowHeight)
     mainCnv.background(10)
 }
 
-function draw(){
-    if (typeSingle.isLoaded() && typeSpace.isLoaded() && typeBell.isLoaded()){
-        //initial formatting
-        background(10)
-        translate(25, windowHeight/2)
-        if (alph < 70) {
-            alph += 0.5
-        }
-        fill(250, 250, 250, alph)
-        textSize(70)
-        textAlign(LEFT)
-        //grey text
-        text(txt, 0, 0)
-        //overlaying text
-        if (charCount >= 0){
-            for (var i = 0; i <= charCount; i++){
-                txtOver[i] = txt[i]
-            }
-            fill(250)
-            txtOver_string = txtOver.join("")
-            textAlign(LEFT)
-            text(txtOver_string, 0, 0)
-        }
-        //next in score
+function draw() {
+    //if assets are loaded
+    if (typeSingle.isLoaded() && typeSpace.isLoaded() && typeBell.isLoaded()) {
+        renderText()
+            //next in score
         if (txt.length === txtOver.length) {
-            if (scoreCount < score.length - 1){
-                scoreCount++
-                charCount = -1
-                alph = 0
-                txt = score[scoreCount]
-                txtOver = []
-                typeBell.play()
-            } else {
-                //prevent from looping if reached last entry in score array + last bell sound c:
-                var lastBell = setInterval(function() { typeBell.play() }, 300)
-                setTimeout(function() { clearInterval(lastBell) }, 1000)
-                noLoop()
+            //allowNext bool var avoid the function being triggerd each frame
+            if(allowNext){
+                setTimeout(function() { nextScore() }, 500)
+                allowNext = false
             }
-
+            
         }
     }
+    //if assets are still loading
     else {
         background(10)
-        translate(25, windowHeight/2)
+        translate(25, windowHeight / 2)
         fill(250, 250, 250, 100)
         textSize(70)
         textAlign(LEFT)
         text('Loading...', 0, 0)
     }
 }
+//////////////////////////////////////////////////////////////////////////////////////
+function keyPressed() {
+    if(allowInput){
+        //typewriter sounds AND check for corrispondence
+        if (keyCode === txt.charCodeAt(charCount + 1) || keyCode === (txt.charCodeAt(charCount + 1) - 32)) {
+            if (keyCode !== 32) {
+                //audio
+                if (useraudioOn) {
+                    typeSingle.pan(random(-0.8, 0.8))
+                    typeSingle.setVolume(random(0.1, 0.8))
+                    typeSingle.play()
+                }
+            }
+            else {
+                //audio
+                if (useraudioOn) {
+                    typeSpace.play()
+                }
+            }
+            charCount++
+        }
+        else if (keyCode === 186 && (txt.charCodeAt(charCount + 1) === 232)) {
+            //audio
+            if (useraudioOn) {
+                typeSingle.pan(random(-0.8, 0.8))
+                typeSingle.setVolume(random(0.1, 0.8))
+                typeSingle.play()
+            }
+            charCount++
+        }
+        else if (keyCode === 219 && (txt.charCodeAt(charCount + 1) === 63)) {
+            //audio
+            if (useraudioOn) {
+                typeSingle.pan(random(-0.8, 0.8))
+                typeSingle.setVolume(random(0.1, 0.8))
+                typeSingle.play()
+            }
+            charCount++
+        }
+        else {
+            console.log("The char is: " + txt.charCodeAt(charCount + 1) + ", you typed: " + keyCode)
+        }
+        switch (scoreCount) {
+        case 0:
+            var roomVol = ( (charCount + 1) / txt.length ) * 2.5
+            if (charCount === 0) {
+                roomTone1.loop(0, 1, roomVol, 10, 60)
+            }
+            roomTone1.setVolume(roomVol, 0.10)
+            break;
+        case 1:
 
-function keyPressed(){
-    //typewriter sounds AND check for corrispondence
-    if (keyCode === txt.charCodeAt(charCount+1) || keyCode === (txt.charCodeAt(charCount+1) - 32)) {
-        if (keyCode !== 32) {
-            typeSingle.pan(random(-1, 1))
-            typeSingle.setVolume(random(0, 1))
-            typeSingle.play()
-        } else {
-            typeSpace.play()
+            break;
         }
-        charCount++
-        } else if (keyCode === 186 && (txt.charCodeAt(charCount+1) === 232)){
-            typeSingle.pan(random(-1, 1))
-            typeSingle.setVolume(random(0, 1))
-            typeSingle.play()
-            charCount++
-        } else if (keyCode === 219 && (txt.charCodeAt(charCount+1) === 63)){
-            typeSingle.pan(random(-1, 1))
-            typeSingle.setVolume(random(0, 1))
-            typeSingle.play()
-            charCount++
-        } else {
-            console.log("The char is: " + txt.charCodeAt(charCount+1) + ", you typed: " + keyCode)
-        }
+    } 
 }
+/////////////////////////////////////////////////////////////////////////////////////
+function renderText() {
+    if (allowInput === true) {
+        //initial formatting
+        background(10)
+        translate(25, windowHeight / 2)
+        if (alph < 70) {
+            alph += 1
+        }
+        fill(250, 250, 250, alph)
+        textSize(txtSize)
+        textAlign(LEFT)
+        textFont(typeFont)
+        if (scoreCount === 0) {
+            if (alphInstr < 70) {
+                alphInstr += 0.25
+            }
+            push()
+            translate(0, 45)
+            fill(250, 250, 250, alphInstr)
+            textSize(txtSize / 3.5)
+            textAlign(LEFT)
+            textFont(typeFont)
+            text('Use your keyboard to type the text displayed.', 0, 0)
+            translate(0, -45)
+            textSize(txtSize / 4)
+            fill(250, 250, 250, 70)
+            text('An interactive audio experiment by Lorenzo Micozzi Ferri.', -25, height/2 - 10)
+            text("Based on Muriel Spark s novel.", -25, height/2 - 30)
+            pop()
+        }
+            //grey text
+        text(txt, 0, 0)
+            //overlaying text
+        if (charCount >= 0) {
+            for (var i = 0; i <= charCount; i++) {
+                txtOver[i] = txt[i]
+            }
+            fill(230)
+            txtOver_string = txtOver.join("")
+            textAlign(LEFT)
+            text(txtOver_string, 0, 0)
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////
+function nextScore() {
+    //if its not the last section goes to the next one
+    if (scoreCount < score.length - 1) {
+        scoreCount++
+        charCount = -1
+        alph = 0
+        txt = score[scoreCount]
+        txtOver = []
+            //audio
+        if (useraudioOn) {
+            typeBell.play()
+        }
+        switch (scoreCount) {
+            case 0:
+                break;
+            case 1:
+                useraudioOn = false
+                txtSize = 50
+                break;
+            case 2:
+                rest = luggage.duration() * 1000
+                luggage.setVolume(0.6)
+                luggage.play()
+                allowInput = false
+                setTimeout(function() { allowInput = true }, rest)
+                break;
+        }
+        allowNext = true
+    }
+    else {
+        //prevent from looping if reached last entry in score array + last bell sound
+        var lastBell = setInterval(function () {
+            //audio
+            if (useraudioOn) {
+                typeBell.play()
+            }
+        }, 300)
+        setTimeout(function () {
+            clearInterval(lastBell)
+        }, 1000)
+        noLoop()
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////
+//stems
+function foley(state) {}
 
+function ambience(state) {}
+
+function voices(state) {}
+///////////////////////////////////////////////////////////////////////////////////
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(windowWidth, windowHeight);
 }
