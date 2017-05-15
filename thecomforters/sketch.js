@@ -5,8 +5,11 @@ var typeBell
 var roomTone1
 var luggage
 var typeFont
+var femsrcArr = []
+var femArr = []
+var femCount = 0
 
-var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in']
+var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in', 'test']
 
 var scoreCount = 0
 var txt = score[scoreCount]
@@ -30,6 +33,9 @@ function setup() {
     roomTone1 = loadSound( /*thecomforters*/ '/src/roomTone1.mp3')
     luggage = loadSound( /*thecomforters*/ '/src/luggage.wav')
     typeFont = loadFont( /*thecomforters*/ '/src/Olivetti.ttf')
+    for (let q = 1; q <= 16; q++){
+        femsrcArr[q] = loadSound( /*thecomforters */ '/src/fem/(' + q.toString() + ').mp3')
+    }
     mainCnv = createCanvas(windowWidth, windowHeight)
     mainCnv.background(10)
 }
@@ -111,6 +117,12 @@ function keyPressed() {
         case 1:
 
             break;
+        case 2:
+            femCount++
+            var rndFem = round(random(1, 16))
+            femArr[femCount] = femsrcArr[rndFem]
+            femArr[femCount].loop(0, 1, 1/10, 0, femArr[femCount].duration())
+            break;
         }
     } 
 }
@@ -185,6 +197,12 @@ function nextScore() {
                 luggage.play()
                 allowInput = false
                 setTimeout(function() { allowInput = true }, rest)
+                break;
+            case 3:
+                console.log(femCount)
+                for(var k = 1; k < femCount; k++){
+                    femArr[k].stop()
+                }
                 break;
         }
         allowNext = true
