@@ -8,8 +8,9 @@ var typeFont
 var femsrcArr = []
 var femArr = []
 var femCount = 0
+var femMult = 0
 
-var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in', 'test']
+var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in', 'work in progress']
 
 var scoreCount = 0
 var txt = score[scoreCount]
@@ -20,32 +21,40 @@ var alphInstr = 0
 var alphCred = 0
 
     //variabili relative alle sezioni riprodotte
-var txtSize = 100
+
 var useraudioOn = true
 var allowNext = true
 var allowInput = true
+var allowRender = true
 var rest = 0
+var txtSize
+var txtsizeMult = 1
     ///////////////////////////////////////////////////////////////////////////////////////
+
 function setup() {
     for (let q = 1; q <= 16; q++){
-        femsrcArr[q] = loadSound( '/thecomforters/src/fem/(' + q.toString() + ').mp3')
+        femsrcArr[q] = loadSound( /*'/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
     }
-    typeFont = loadFont( '/thecomforters/src/Olivetti.ttf')
-    typeSingle = loadSound( '/thecomforters/src/typeSingle.mp3')
-    typeSpace = loadSound( '/thecomforters/src/typeSpace.mp3')
-    typeBell = loadSound( '/thecomforters/src/typeBell.mp3')
-    roomTone1 = loadSound( '/thecomforters/src/roomTone1.mp3')
-    luggage = loadSound( '/thecomforters/src/luggage.wav')
+    typeFont = loadFont( /*'/thecomforters*/'/src/Olivetti.ttf')
+    typeSingle = loadSound( /*'/thecomforters*/'/src/typeSingle.mp3')
+    typeSpace = loadSound( /*'/thecomforters*/'/src/typeSpace.mp3')
+    typeBell = loadSound( /*'/thecomforters*/'/src/typeBell.mp3')
+    roomTone1 = loadSound( /*'/thecomforters*/'/src/roomTone1.mp3')
+    luggage = loadSound( /*'/thecomforters*/'/src/luggage.wav')
+    foley1 = loadSound( /*'/thecomforters*/'/src/foley1.wav')
     
     
     mainCnv = createCanvas(windowWidth, windowHeight)
     mainCnv.background(10)
+    txtSize = ((100 * height) / 1080) - 1920/(width/4) * txtsizeMult
 }
 
 function draw() {
-    //if assets are loaded TO DO ADD FEMSRCARR AND FONT TO LOAD
+    //if assets are loaded ..TO DO ADD FEMSRCARR AND FONT TO LOAD
     if (typeSingle.isLoaded() && typeSpace.isLoaded() && typeBell.isLoaded() && roomTone1.isLoaded() && luggage.isLoaded()) {
-        renderText()
+        if(allowRender) {
+            renderText()
+        }
             //next in score
         if (txt.length === txtOver.length) {
             //allowNext bool var avoid the function being triggerd each frame
@@ -74,9 +83,9 @@ function keyPressed() {
             if (keyCode !== 32) {
                 //audio
                 if (useraudioOn) {
-                    typeSingle.pan(random(-0.8, 0.8))
-                    typeSingle.setVolume(random(0.1, 0.8))
                     typeSingle.play()
+                    typeSingle.setVolume(random(0.1, 0.8))
+                    typeSingle.pan(random(-0.8, 0.8))
                 }
             }
             else {
@@ -123,14 +132,15 @@ function keyPressed() {
             femCount++
             var rndFem = round(random(1, 16))
             femArr[femCount] = femsrcArr[rndFem]
-            femArr[femCount].loop(0, 1, 1/10, 0, femArr[femCount].duration())
+                femMult  = ( femCount / txt.length ) * (femCount/3)
+            femArr[femCount].loop(0, 1, 1/10 * femMult, 0, femArr[femCount].duration())
+            
             break;
         }
     } 
 }
 /////////////////////////////////////////////////////////////////////////////////////
 function renderText() {
-    if (allowInput === true) {
         //initial formatting
         background(10)
         translate(25, windowHeight / 2)
@@ -138,7 +148,7 @@ function renderText() {
             alph += 1
         }
         fill(250, 250, 250, alph)
-        textSize(txtSize)
+        textSize(txtSize * txtsizeMult)
         textAlign(LEFT)
         textFont(typeFont)
         if (scoreCount === 0) {
@@ -172,7 +182,6 @@ function renderText() {
             text(txtOver_string, 0, 0)
         }
     }
-}
 ///////////////////////////////////////////////////////////////////////////////////
 function nextScore() {
     //if its not the last section goes to the next one
@@ -190,15 +199,23 @@ function nextScore() {
             case 0:
                 break;
             case 1:
+                
+                foley1.play(0, 1, 0.3)
                 useraudioOn = false
-                txtSize = 50
+                txtsizeMult = 0.5
                 break;
             case 2:
+                foley1.setVolume(0, 1)
+                foley1.stop(1)
                 rest = luggage.duration() * 1000
-                luggage.setVolume(0.6)
-                luggage.play()
+                luggage.play(0, 1, 0.5)
                 allowInput = false
-                setTimeout(function() { allowInput = true }, rest)
+                allowRender = false
+                setTimeout(function() { 
+                    allowInput = true 
+                    allowRender = true
+                    foley1.play(0, 1, 0.3)
+                                      }, rest)
                 break;
             case 3:
                 console.log(femCount)
@@ -231,6 +248,8 @@ function ambience(state) {}
 
 function voices(state) {}
 ///////////////////////////////////////////////////////////////////////////////////
+    
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+    txtSize = ((100 * height) / 1080) - 1920/(width/4)
 }
