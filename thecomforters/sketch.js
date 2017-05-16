@@ -4,6 +4,7 @@ var typeSpace
 var typeBell
 var roomTone1
 var luggage
+var foley1
 var typeFont
 var femsrcArr = []
 var femArr = []
@@ -33,7 +34,7 @@ var txtsizeMult = 1
 
 function setup() {
     for (let q = 1; q <= 16; q++){
-        femsrcArr[q] = loadSound( '/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
+        femsrcArr[q] = loadSound( /*'/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
     }
     typeFont = loadFont( '/thecomforters/src/Olivetti.ttf')
     typeSingle = loadSound( '/thecomforters/src/typeSingle.mp3')
