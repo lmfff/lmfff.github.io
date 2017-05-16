@@ -10,6 +10,7 @@ var femsrcArr = []
 var femArr = []
 var femCount = 0
 var femMult = 0
+var alphAdd = 1
 
 var score = ['The Comforters', 'Caroline began to pack her things', 'Forming words in her mind to keep other words from crowding in', 'work in progress']
 
@@ -33,9 +34,27 @@ var txtsizeMult = 1
     ///////////////////////////////////////////////////////////////////////////////////////
 
 function setup() {
+    
+    //sources for local testing
+    /*
+    for (let q = 1; q <= 16; q++){
+        femsrcArr[q] = loadSound( '/src/fem/(' + q.toString() + ').mp3')
+    }
+    typeFont = loadFont( '/src/Olivetti.ttf')
+    typeSingle = loadSound( '/src/typeSingle.mp3')
+    typeSpace = loadSound( '/src/typeSpace.mp3')
+    typeBell = loadSound( '/src/typeBell.mp3')
+    roomTone1 = loadSound( '/src/roomTone1.mp3')
+    luggage = loadSound( '/src/luggage.wav')
+    foley1 = loadSound( '/src/foley1.wav')
+    */
+    
+    //sources for online use
+    
     for (let q = 1; q <= 16; q++){
         femsrcArr[q] = loadSound( '/thecomforters/src/fem/(' + q.toString() + ').mp3')
     }
+    
     typeFont = loadFont( '/thecomforters/src/Olivetti.ttf')
     typeSingle = loadSound( '/thecomforters/src/typeSingle.mp3')
     typeSpace = loadSound( '/thecomforters/src/typeSpace.mp3')
@@ -118,6 +137,7 @@ function keyPressed() {
         else {
             console.log("The char is: " + txt.charCodeAt(charCount + 1) + ", you typed: " + keyCode)
         }
+        //cases to switch after rendering, on every keystroke
         switch (scoreCount) {
         case 0:
             var roomVol = ( (charCount + 1) / txt.length ) * 2.5
@@ -146,12 +166,13 @@ function renderText() {
         background(10)
         translate(25, windowHeight / 2)
         if (alph < 70) {
-            alph += 1
+            alph += alphAdd
         }
         fill(250, 250, 250, alph)
         textSize(txtSize * txtsizeMult)
         textAlign(LEFT)
         textFont(typeFont)
+    //INTRO TEXT
         if (scoreCount === 0) {
             if (alphInstr < 70) {
                 alphInstr += 0.25
@@ -170,6 +191,7 @@ function renderText() {
             text("Based on Muriel Spark s novel.", -25, height/2 - 30)
             pop()
         }
+    //TEXT RENDERED IN EVERY SECTION
             //grey text
         text(txt, 0, 0)
             //overlaying text
@@ -196,16 +218,18 @@ function nextScore() {
         if (useraudioOn) {
             typeBell.play()
         }
+        //cases to switch before rendering
         switch (scoreCount) {
             case 0:
                 break;
             case 1:
-                
                 foley1.play(0, 1, 0.3)
                 useraudioOn = false
                 txtsizeMult = 0.5
+                alphAdd = 0.3
                 break;
             case 2:
+                alphAdd = 0.3
                 foley1.setVolume(0, 1)
                 foley1.stop(1)
                 rest = luggage.duration() * 1000
@@ -219,6 +243,7 @@ function nextScore() {
                                       }, rest)
                 break;
             case 3:
+                alphAdd = 0.3
                 console.log(femCount)
                 for(var k = 1; k < femCount; k++){
                     femArr[k].stop()
