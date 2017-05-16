@@ -32,14 +32,10 @@ var txtSize
 var txtsizeMult = 1
     ///////////////////////////////////////////////////////////////////////////////////////
 
-function preload() {
-    for (let q = 1; q <= 16; q++){
-        femsrcArr[q] = loadSound( /*'/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
-    }
-}
-
 function setup() {
-    
+    for (let q = 1; q <= 16; q++){
+        femsrcArr[q] = loadSound( '/thecomforters/src/fem/(' + q.toString() + ').mp3')
+    }
     typeFont = loadFont( '/thecomforters/src/Olivetti.ttf')
     typeSingle = loadSound( '/thecomforters/src/typeSingle.mp3')
     typeSpace = loadSound( '/thecomforters/src/typeSpace.mp3')
