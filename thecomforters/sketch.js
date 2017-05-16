@@ -33,15 +33,15 @@ var txtsizeMult = 1
 
 function setup() {
     for (let q = 1; q <= 16; q++){
-        femsrcArr[q] = loadSound( /*'/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
+        femsrcArr[q] = loadSound( '/thecomforters*/'/src/fem/(' + q.toString() + ').mp3')
     }
-    typeFont = loadFont( /*'/thecomforters*/'/src/Olivetti.ttf')
-    typeSingle = loadSound( /*'/thecomforters*/'/src/typeSingle.mp3')
-    typeSpace = loadSound( /*'/thecomforters*/'/src/typeSpace.mp3')
-    typeBell = loadSound( /*'/thecomforters*/'/src/typeBell.mp3')
-    roomTone1 = loadSound( /*'/thecomforters*/'/src/roomTone1.mp3')
-    luggage = loadSound( /*'/thecomforters*/'/src/luggage.wav')
-    foley1 = loadSound( /*'/thecomforters*/'/src/foley1.wav')
+    typeFont = loadFont( '/thecomforters/src/Olivetti.ttf')
+    typeSingle = loadSound( '/thecomforters/src/typeSingle.mp3')
+    typeSpace = loadSound( '/thecomforters/src/typeSpace.mp3')
+    typeBell = loadSound( '/thecomforters/src/typeBell.mp3')
+    roomTone1 = loadSound( '/thecomforters/src/roomTone1.mp3')
+    luggage = loadSound( '/thecomforters/src/luggage.wav')
+    foley1 = loadSound( '/thecomforters/src/foley1.wav')
     
     
     mainCnv = createCanvas(windowWidth, windowHeight)
