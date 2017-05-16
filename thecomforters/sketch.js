@@ -51,7 +51,7 @@ function setup() {
 
 function draw() {
     //if assets are loaded ..TO DO ADD FEMSRCARR AND FONT TO LOAD
-    if (typeSingle.isLoaded() && typeSpace.isLoaded() && typeBell.isLoaded() && roomTone1.isLoaded() && luggage.isLoaded()) {
+    if (typeSingle.isLoaded() && typeSpace.isLoaded() && typeBell.isLoaded() && roomTone1.isLoaded() && luggage.isLoaded() && foley1.isLoaded()) {
         if(allowRender) {
             renderText()
         }
