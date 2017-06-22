@@ -1,25 +1,7 @@
-var score = [
-    
-    ['Caroline began to pack her things.', 'She heard loud noises coming from outside her room,', 'again,', 'choice'],
-    /* choice1 */ ['loud enough to make her stop and listen;', 'Caroline found her neighbours\' arguments entairtaining.', /*'choice'*/],
-    /* choice2 */ ['but time was running, so Caroline grabbed her notes', 'and left.', /*'choice'*/],
-    //['you chose left'],
-    //['you chose right']
-    
-]
+var pointer = score
+var restPointer = restScore
 
 var choiceScore = ['She stops to listen.', 'She leaves.', /*'Test Left'*/, /*'Test Right'*/]
-
-var restScore = [
-    [3000, 2000, 100],
-    /* choice1 */ [1000, 10000000],
-    /* choice2 */ [1000, 10000000]
-]
-
-var debugMode = false
-if (debugMode) {
-    var restScore = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-}
 
 var choiceFillR = 100
 var choiceFillL = 100
@@ -30,6 +12,8 @@ var choiceMade
 var choiceCount = -1
 var scoreLine = 0
 var scoreCount = 0
+var restOff = 0
+var restCount = scoreCount + restOff
 var charCount = -1
 var hCount = 0
 
@@ -60,11 +44,11 @@ function setup() {
 function draw() {
     background(10)
     stopBarAnim()
-    if (score[scoreLine][scoreCount] === 'choice') {
+    if (pointer.txt[scoreCount] === 'choice') {
         inputAllowed = false
         stopBarIsLoading = true
-        choice1 = choiceScore[choiceCount]
-        choice2 = choiceScore[choiceCount + 1]
+        choice1 = pointer.txt[scoreCount + 1]
+        choice2 = pointer.txt[scoreCount + 2]
     } else {
         choice1 = ''
         choice2 = ''
@@ -95,15 +79,15 @@ function windowResized() {
 
 
 function keyPressed() {
-    if (score[scoreLine][scoreCount] === 'choice') {
+    if (pointer.txt[scoreCount] === 'choice') {
         inputAllowed = false
     }
     if (inputAllowed && keyCode != exKeyCode && keyCode != exExKeyCode) {
         charCount++
         exExKeyCode = exKeyCode
         exKeyCode = keyCode
-        textRend += score[scoreLine][scoreCount].charAt(charCount)
-        if (charCount === score[scoreLine][scoreCount].length - 1) {
+        textRend += pointer.txt[scoreCount].charAt(charCount)
+        if (charCount === pointer.txt[scoreCount].length - 1) {
             textRend += '\n'
             charCount = -1
             inputAllowed = false
@@ -111,50 +95,60 @@ function keyPressed() {
             setTimeout(function() { 
                 inputAllowed = true
                 stopBarIsLoading = false
-            }, restScore[scoreLine][scoreCount])
+            }, restPointer.rest[restCount])
+            if (pointer.txt[scoreCount] === 'choice') {
+                inputAllowed = false                
+            }
             scoreCount++
             hCount++
-            if (score[scoreLine][scoreCount] === 'choice') {
-                inputAllowed = false
-                if (choiceCount < 0) {
-                    choiceCount++
-                } else {
-                    choiceCount += 2
-                }
-                
-            }
+            restCount = scoreCount + restOff
         }
     }
-    if (score[scoreLine][scoreCount] === 'choice') {
+    if (pointer.txt[scoreCount] === 'choice') {
         if (keyCode === RIGHT_ARROW) {
-            choiceMade = 'right'
+            choiceMade = 'b'
             choiceFillR = 250
             choiceFillL = 100
         }
         if (keyCode === LEFT_ARROW) {
-            choiceMade = 'left'
+            choiceMade = 'a'
             choiceFillL = 250
             choiceFillR = 100
         }
         if (choiceMade != undefined && keyCode === ENTER) {
-            if (choiceMade === 'right') {
-                scoreLine += 2
+            if (choiceMade === 'a') {
+                pointer = pointer.a
+                restPointer = restPointer.a
                 scoreCount = 0
+                restOff = 0
+                restCount = 0
+                setTimeout(function() { 
                 inputAllowed = true
                 stopBarIsLoading = false
+            }, restPointer.rest[restCount])
             } else {
-                scoreLine++
+                pointer = pointer.b
+                restPointer = restPointer.b
                 scoreCount = 0
+                restOff = 0
+                restCount = 0
+                setTimeout(function() { 
                 inputAllowed = true
                 stopBarIsLoading = false
+            }, restPointer.rest[restCount])
             }
+            choiceMade = undefined
+            choiceFillL = 100
+            choiceFillR = 100
+            restOff += 1
+            restCount = scoreCount + restOff
         }
     }
 }
 
 function choiceRender() {
     if (choice1 != undefined && choice2 != undefined) {
-        if (score[scoreLine][scoreCount] === 'choice') {
+        if (pointer.txt[scoreCount] === 'choice') {
             textAlign(RIGHT)
             fill(choiceFillL)
             text(choice1, width/2 - 10, height - 50)
