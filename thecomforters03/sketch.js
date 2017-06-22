@@ -1,12 +1,15 @@
 var score = [
     
     ['Caroline began to pack her things.', 'She heard loud noises coming from outside her room,', 'again,', 'choice'],
-    /* choice1 */ ['so loud she decides to stop and listen;', 'she found her neighbours\' arguments entairtaining.'],
-    /* choice2 */ ['but time was running, so she grabbed her notes', 'and left.']
+    /* choice1 */ ['loud enough to make her stop and listen;', 'Caroline found her neighbours\' arguments entairtaining.', /*'choice'*/],
+    /* choice2 */ ['but time was running, so Caroline grabbed her notes', 'and left.', /*'choice'*/],
+    //['you chose left'],
+    //['you chose right']
     
 ]
 
-var choiceScore = ['She stops to listen.', 'She leaves.']
+var choiceScore = ['She stops to listen.', 'She leaves.', /*'Test Left'*/, /*'Test Right'*/]
+
 var restScore = [
     [3000, 2000, 100],
     /* choice1 */ [1000, 10000000],
@@ -40,6 +43,8 @@ var yTarget = 0
 var textRend = ''
 var title = 'THE COMFORTERS'
 var titleFill = 0
+var exKeyCode
+var exExKeyCode
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
@@ -49,6 +54,8 @@ function setup() {
     textAlign(CENTER)
     fill(200)
 }
+
+
 
 function draw() {
     background(10)
@@ -63,7 +70,8 @@ function draw() {
         choice2 = ''
     }
     fill(250)
-    textSize(40)
+    textAlign(CENTER)
+    textSize(50)
     if (frameCount < 240) {
         inputAllowed = false
         titleFill += 1
@@ -79,14 +87,21 @@ function draw() {
     }
 }
 
+
+
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight)
 }
 
 
 function keyPressed() {
-    if (inputAllowed) {
+    if (score[scoreLine][scoreCount] === 'choice') {
+        inputAllowed = false
+    }
+    if (inputAllowed && keyCode != exKeyCode && keyCode != exExKeyCode) {
         charCount++
+        exExKeyCode = exKeyCode
+        exKeyCode = keyCode
         textRend += score[scoreLine][scoreCount].charAt(charCount)
         if (charCount === score[scoreLine][scoreCount].length - 1) {
             textRend += '\n'
@@ -101,7 +116,12 @@ function keyPressed() {
             hCount++
             if (score[scoreLine][scoreCount] === 'choice') {
                 inputAllowed = false
-                choiceCount++
+                if (choiceCount < 0) {
+                    choiceCount++
+                } else {
+                    choiceCount += 2
+                }
+                
             }
         }
     }
@@ -135,10 +155,12 @@ function keyPressed() {
 function choiceRender() {
     if (choice1 != undefined && choice2 != undefined) {
         if (score[scoreLine][scoreCount] === 'choice') {
+            textAlign(RIGHT)
             fill(choiceFillL)
-            text(choice1, width/3, height - 25)
+            text(choice1, width/2 - 10, height - 50)
+            textAlign(LEFT)
             fill(choiceFillR)
-            text(choice2, 2*width/3, height - 25)
+            text(choice2, width/2 + 10, height - 50)
         }
     }
 }
