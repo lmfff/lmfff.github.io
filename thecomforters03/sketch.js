@@ -16,6 +16,7 @@ var restOff = 0
 var restCount = scoreCount + restOff
 var charCount = -1
 var hCount = 0
+var globalCharCount = 0
 
 var stopBar = '|'
 var stopBarIsLoading = false
@@ -25,6 +26,8 @@ var trsX = 0
 var trsY = 0
 var yTarget = 0
 var textRend = ''
+var titleRend = ''
+var titleState = 1
 var title = 'THE COMFORTERS'
 var titleFill = 0
 var exKeyCode
@@ -37,9 +40,20 @@ function setup() {
     textFont("Courier")
     textAlign(CENTER)
     fill(200)
+    loadRestScore()
+    restPointer = restScore
+    soundScore()
 }
 
-
+function preload() {
+    typeSingle = loadSound( '/src/typeSingle.mp3')
+    typeSpace = loadSound( '/src/typeSpace.mp3')
+    typeBell = loadSound( '/src/typeBell.mp3')
+    roomTone1 = loadSound( '/src/roomTone1.mp3')
+    luggage = loadSound( '/src/luggage.wav')
+    foley1 = loadSound( '/src/foley1.wav')
+    
+}
 
 function draw() {
     background(10)
@@ -56,19 +70,16 @@ function draw() {
     fill(250)
     textAlign(CENTER)
     textSize(50)
-    if (frameCount < 240) {
-        inputAllowed = false
-        titleFill += 1
-        fill(titleFill)
-        text(title, width/2, height - 80 - (25 * (hCount + 1)))
-    } else if (frameCount === 240) {
+    if (titleState) {
         inputAllowed = true
+        text(titleRend + stopBar, width/2, height - 80 - (25 * (hCount + 1)))
     } else {
         text(title, width/2, height - 80 - (25 * (hCount + 1)))
         textSize(20)
         text(textRend + stopBar, width/2, height - 50 - (25 * hCount))
         choiceRender()
     }
+    
 }
 
 
@@ -82,7 +93,29 @@ function keyPressed() {
     if (pointer.txt[scoreCount] === 'choice') {
         inputAllowed = false
     }
-    if (inputAllowed && keyCode != exKeyCode && keyCode != exExKeyCode) {
+    if (titleState && keyCode != exKeyCode && keyCode != exExKeyCode) {
+        globalCharCount++
+        soundScore()
+        typeSingle.play()
+        charCount++
+        exExKeyCode = exKeyCode
+        exKeyCode = keyCode
+        titleRend += title.charAt(charCount)
+        if (charCount === title.length - 1) {
+            titleState = 0
+            charCount = -1
+            inputAllowed = false
+            stopBarIsLoading = true
+            setTimeout(function() { 
+                inputAllowed = true
+                stopBarIsLoading = false
+                
+            }, 1500)
+        }
+    }
+    if (inputAllowed && keyCode != exKeyCode && keyCode != exExKeyCode && !titleState) {
+        globalCharCount++
+        soundScore()
         charCount++
         exExKeyCode = exKeyCode
         exKeyCode = keyCode

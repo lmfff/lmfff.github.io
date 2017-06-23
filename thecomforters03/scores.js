@@ -45,22 +45,8 @@ var score = {
         }
     }
 } 
-if (!debugMode) {
-    var restScore = {
-    rest: [2000, 1000, 100],
-    a: {
-        rest: [/*choice*/100, 1000, 700, 500, 700, 1000, 100, /*newscene*/ 5000, 1000, 1000, 500, 100 ],
-        a: {},
-        b: {}
-    },
-    b: { 
-        rest: [0, 0],
-        a: {},
-        b: {}
-    }
-}
-} else {
-    var restScore = {
+
+var restScore = {
         rest: [0, 0, 0],
         a: {
             rest: [],
@@ -73,5 +59,54 @@ if (!debugMode) {
             b: {}
         }
     }
+
+function loadRestScore(){
+    restScore = {
+        rest: [luggage.duration()*1000 - 2000, 1000, 100],
+        a: {
+            rest: [/*choice*/100, 1000, 700, 500, 700, 1000, 100, /*newscene*/ 5000, 1000, 1000, 500, 100 ],
+            a: {},
+            b: {}
+        },
+        b: { 
+            rest: [0, 0],
+            a: {},
+            b: {}
+        }
+    }
+}
+    
+
+    
+
+
+function soundScore() {
+    var q = globalCharCount
+    console.log(q)
+    switch (true) {
+        case (q === 0):
+            var roomVol = ( (globalCharCount + 1) / title.length )
+            roomTone1.loop(0, 1, roomVol, 10, 60)
+            break;
+        case (q < title.length - 1):
+            var roomVol = ( (globalCharCount + 1) / title.length ) * 2.5
+            roomTone1.setVolume(roomVol, 0.10)
+            typeSingle.setVolume(random(0.1, 0.8))
+            typeSingle.pan(random(-0.8, 0.8))
+            break;
+        case (q === 14):
+            typeSingle.setVolume(0)
+            typeBell.setVolume(1)
+            typeBell.play()
+            foley1.play(0, 1, 0.3)
+            break;
+        case (q === 48):
+            foley1.setVolume(0, 1)
+            foley1.stop(1)
+            luggage.play(0, 1, 0.5)
+            break;
+                           }
+    
+    
 }
 
