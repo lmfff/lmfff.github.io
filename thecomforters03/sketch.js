@@ -53,6 +53,9 @@ function preload() {
     luggage = loadSound('/src/luggage.wav')
     foley1 = loadSound('/src/foley1.wav')
     argument = loadSound('/src/argument.wav')
+    rainScene = loadSound('/src/rainScene.wav')
+    trainScene = loadSound('/src/trainScene.wav')
+    doorClose = loadSound('/src/doorClose.mp3')
 }
 
 function draw() {

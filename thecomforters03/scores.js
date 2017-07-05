@@ -58,7 +58,7 @@ function loadRestScore() {
             , b: {}
         }
         , b: {
-            rest: [0, 0]
+            rest: [0, 0, 2000, 5000, 1000, 1000, 500, 100]
             , a: {}
             , b: {}
         }
@@ -123,18 +123,35 @@ function soundScore() {
                     console.log('done')
                     simKeyPressed()
                 }, 150)
+                rainScene.play(0, 1, 1)
             }
             if (q === (55 + score.txt[1].length + score.a.txt[0].length + score.a.txt[1].length + score.a.txt[2].length + score.a.txt[3].length + score.a.txt[4].length - 5)) {
-                
+                argument.setVolume(0, 2)
+                foley1.setVolume(0, 2)
+                roomTone1.setVolume(0, 2)
             }
             iter += 1
             argumentVol += 0.015 * iter
             argument.setVolume(argumentVol, 0.10)
+            
             break;
         case (q === (55 + score.txt[1].length + score.a.txt[0].length + score.a.txt[1].length + score.a.txt[2].length + score.a.txt[3].length + score.a.txt[4].length - 1)):
             console.log('case3')
+            argument.stop()
             clearInterval(autoKey)
             break;
         }
+    }
+    else if (pointer.pos === 'b') {
+        switch (true) {
+            case (q === 106):
+                console.log('culo')
+                argument.setVolume(0, 5)
+                foley1.setVolume(0, 5)
+                roomTone1.setVolume(0, 5)
+                doorClose.play(4, 1, 1)
+                trainScene.play(1, 1, 1)
+                break;
+                    }
     }
 }
