@@ -126,18 +126,19 @@ function soundScore() {
                 rainScene.play(0, 1, 1)
             }
             if (q === (55 + score.txt[1].length + score.a.txt[0].length + score.a.txt[1].length + score.a.txt[2].length + score.a.txt[3].length + score.a.txt[4].length - 5)) {
-                argument.setVolume(0, 2)
-                foley1.setVolume(0, 2)
-                roomTone1.setVolume(0, 2)
+                argument.setVolume(0, 3)
+                foley1.setVolume(0, 3)
+                roomTone1.setVolume(0, 3)
+                console.log('0.3')
             }
             iter += 1
             argumentVol += 0.015 * iter
             argument.setVolume(argumentVol, 0.10)
-            
             break;
+                
         case (q === (55 + score.txt[1].length + score.a.txt[0].length + score.a.txt[1].length + score.a.txt[2].length + score.a.txt[3].length + score.a.txt[4].length - 1)):
             console.log('case3')
-            argument.stop()
+            argument.setVolume(0, 3)
             clearInterval(autoKey)
             break;
         }
