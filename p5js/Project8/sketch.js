@@ -38,7 +38,7 @@ function Tam(x, y, width, height) {
         case 1:
             if (!(frameCount % 15)) {
                 tam.height += q
-                tam.x = constrain(tam.x + random(-20, 20), -3*width, 3*width)
+                tam.x = constrain(tam.x + random(-20, 20), -4*width - 15, 4*width -15)
                 q = -q
             }
             break;
