@@ -36,9 +36,9 @@ function Tam(x, y, width, height) {
     this.update = function () {
         switch (this.state) {
         case 1:
-            if (!(frameCount % 20)) {
+            if (!(frameCount % 15)) {
                 tam.height += q
-                tam.x += random(-20, 20)
+                tam.x = constrain(tam.x + random(-20, 20), -3*width, 3*width)
                 q = -q
             }
             break;
