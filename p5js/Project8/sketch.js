@@ -35,10 +35,14 @@ function Tam(x, y, width, height) {
     this.height = height;
     this.update = function () {
         switch (this.state) {
+        case 0:
+            tam.height = 100
+            q = 15
+            break;
         case 1:
             if (!(frameCount % 15)) {
                 tam.height += q
-                tam.x = constrain(tam.x + random(-20, 20), -4*width - 15, 4*width -15)
+                tam.x = constrain(tam.x + random(-20, 20), -4 * width - 15, 4 * width - 15)
                 q = -q
             }
             break;
@@ -52,6 +56,15 @@ function Tam(x, y, width, height) {
         rect(this.x - this.width / 2 + this.width / 5, this.y - this.height + 20, 5, 5)
         rect(this.x - this.width / 2 + (3.5 * this.width) / 5, this.y - this.height + 20, 5, 5)
     }
+}
+
+function mousePressed() {
+    if (tam.state === 0) {
+        tam.state = 1
+    } else {
+        tam.state = 0
+    }
+    console.log(tam.state)
 }
 
 function refr() {
