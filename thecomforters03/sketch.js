@@ -1,14 +1,11 @@
 var pointer = score
 var restPointer = restScore
-
 var choiceScore = ['She stops to listen.', 'She leaves.', /*'Test Left'*/ , /*'Test Right'*/ ]
-
 var choiceFillR = 100
 var choiceFillL = 100
 var choice1
 var choice2
 var choiceMade
-
 var choiceCount = -1
 var scoreLine = 0
 var scoreCount = 0
@@ -17,11 +14,9 @@ var restCount = scoreCount + restOff
 var charCount = -1
 var hCount = 0
 var globalCharCount = 0
-
 var stopBar = '|'
 var stopBarIsLoading = false
 var inputAllowed = true
-
 var trsX = 0
 var trsY = 0
 var yTarget = 0
@@ -35,6 +30,8 @@ var exExKeyCode
 var typeGate = false
 var typeMaxV = 50
 var fired = false
+var timer1;
+var timer2;
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
@@ -56,7 +53,9 @@ function preload() {
     luggage = loadSound('/src/luggage.wav')
     foley1 = loadSound('/src/foley1.wav')
     argument = loadSound('/src/argument.wav')
-
+    rainScene = loadSound('/src/rainScene.wav')
+    trainScene = loadSound('/src/trainScene.wav')
+    doorClose = loadSound('/src/doorClose.mp3')
 }
 
 function draw() {
@@ -67,7 +66,8 @@ function draw() {
         stopBarIsLoading = true
         choice1 = pointer.txt[scoreCount + 1]
         choice2 = pointer.txt[scoreCount + 2]
-    } else {
+    }
+    else {
         choice1 = ''
         choice2 = ''
     }
@@ -77,21 +77,18 @@ function draw() {
     if (titleState) {
         inputAllowed = true
         text(titleRend + stopBar, width / 2, height - 80 - (25 * (hCount + 1)))
-    } else {
+    }
+    else {
         text(title, width / 2, height - 80 - (25 * (hCount + 1)))
         textSize(20)
         text(textRend + stopBar, width / 2, height - 50 - (25 * hCount))
         choiceRender()
     }
-
 }
-
-
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight)
 }
-
 
 function keyPressed() {
     if (pointer.txt[scoreCount] === 'choice') {
@@ -107,7 +104,8 @@ function keyPressed() {
         charCount++
         if (title.charAt(charCount) === ' ') {
             typeSpace.play()
-        } else {
+        }
+        else {
             typeSingle.play()
         }
         exExKeyCode = exKeyCode
@@ -121,7 +119,6 @@ function keyPressed() {
             setTimeout(function () {
                 inputAllowed = true
                 stopBarIsLoading = false
-
             }, 1500)
         }
     }
@@ -154,15 +151,16 @@ function keyPressed() {
         }
     }
     if (pointer.txt[scoreCount] === 'choice') {
+        //first choice is automatically made in 5 seconds
         if (pointer.pos === 'root' && !fired) {
             fired = true
-            setTimeout(function () {
+            timer1 = setTimeout(function () {
                 choiceMade = 'a'
                 choiceFillL = 250
                 choiceFillR = 100
                 typeSingle.play()
             }, 5000)
-            setTimeout(function () {
+            timer2 = setTimeout(function () {
                 typeSpace.play()
                 pointer = pointer.a
                 restPointer = restPointer.a
@@ -180,7 +178,6 @@ function keyPressed() {
                 }, restPointer.rest[restCount])
             }, 6000)
         }
-
         if (keyCode === RIGHT_ARROW) {
             choiceMade = 'b'
             choiceFillR = 250
@@ -192,6 +189,9 @@ function keyPressed() {
             choiceFillR = 100
         }
         if (choiceMade != undefined && keyCode === ENTER) {
+            fired = true
+            window.clearTimeout(timer1)
+            window.clearTimeout(timer2)
             if (choiceMade === 'a') {
                 pointer = pointer.a
                 restPointer = restPointer.a
@@ -202,7 +202,8 @@ function keyPressed() {
                     inputAllowed = true
                     stopBarIsLoading = false
                 }, restPointer.rest[restCount])
-            } else {
+            }
+            else {
                 pointer = pointer.b
                 restPointer = restPointer.b
                 scoreCount = 0
@@ -238,7 +239,8 @@ function choiceRender() {
 function stopBarAnim() {
     if (stopBarIsLoading) {
         stopBarLoad()
-    } else {
+    }
+    else {
         stopBarFlash()
     }
 }
@@ -246,7 +248,8 @@ function stopBarAnim() {
 function stopBarFlash() {
     if (frameCount % 20 < 10) {
         stopBar = '|'
-    } else {
+    }
+    else {
         stopBar = ' '
     }
 }
@@ -254,11 +257,37 @@ function stopBarFlash() {
 function stopBarLoad() {
     if (frameCount % 20 === 5) {
         stopBar = "\\"
-    } else if (frameCount % 20 === 10) {
+    }
+    else if (frameCount % 20 === 10) {
         stopBar = '|'
-    } else if (frameCount % 20 === 15) {
+    }
+    else if (frameCount % 20 === 15) {
         stopBar = '/'
-    } else if (frameCount % 20 === 19) {
+    }
+    else if (frameCount % 20 === 19) {
         stopBar = '-'
     }
+}
+
+function simKeyPressed() {
+        globalCharCount++
+        soundScore()
+        charCount++
+        textRend += pointer.txt[scoreCount].charAt(charCount)
+        if (charCount === pointer.txt[scoreCount].length - 1) {
+            textRend += '\n'
+            charCount = -1
+            inputAllowed = false
+            stopBarIsLoading = true
+            setTimeout(function () {
+                inputAllowed = true
+                stopBarIsLoading = false
+            }, restPointer.rest[restCount])
+            if (pointer.txt[scoreCount] === 'choice') {
+                inputAllowed = false
+            }
+            scoreCount++
+            hCount++
+            restCount = scoreCount + restOff
+        }
 }
